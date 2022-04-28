@@ -1,23 +1,49 @@
-import {link} from 'react-router-dom'
-import React from 'react'
+import {link, Navigate, useNavigate} from 'react-router-dom'
+import React , {useState,useEffect,useContext}from 'react'
+import { AuthContext} from "../contexts/auth.Context"
 
 function Login() {
+  const navigate = useNavigate();
+  const { success, loading, user, authLogin}= useContext(AuthContext);
+const [email, setEmail]= useState("");
+const [password, setPassword]= useState("");
+
+useEffect(() => {
+  if (success) {
+    Navigate("/home");
+  }
+}, [success]);
+
+const handleSubmit = (e)=> {
+  e.preventDefault();
+  authLogin(email, password)
+}
+
   return (
-      <form className='form'>
+      <form onSubmit={handleSubmit} className='form'>
       <div className='col-sm-12 col-md-6 col-lg-4 col-xl-4 m-3 p-3 bg-info'>
-    <div className='form-group m-2'>
+    <div className="form-group m-2">
     <label htmlFor='email'>email</label>
-    <input type='text' className='form-control' placeholder='Enter email'/>
+    <input type='text' className='form-control' placeholder='Enter email'
+    value={email}
+    onChange={(e)=>setEmail(e.target.value)
+    }
+    />
     </div>
 
-    <div className='form-group m-2'>
-    <label htmlFor='password'>password</label>
-    <input type='password' className='form-control' placeholder='Enter password'/>
+    <div className="form-group m-2">
+    <label htmlFor="password">password</label>
+    <input type="password" className="form-control" placeholder="Enter password"
+      value={password}
+      onChange={(e)=>setPassword(e.target.value)
+      }
+    
+    />
     </div>
-    <button type='submit' className='btn btn-primary'>
-      Login
-    </button>
+    <button type='submit' className='btn btn-primary m-2'>{loading ? "Loading...": "Login"}</button> 
     <div>
+         I don't have an Account
+    <link to ="/register" className='=nav-link'>Register</link>
     </div>
     </div>
     </form>
